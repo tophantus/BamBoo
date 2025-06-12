@@ -1,0 +1,44 @@
+{
+  "users": [
+    { "id": 1, "username": "alice", "avatar": "/avatar.jpg", "latestText": "Talk to you later!", "unreadCount": 0 },
+    { "id": 2, "username": "bob", "avatar": "/avatar.jpg", "latestText": "Okay, bye!", "unreadCount": 2 },
+    { "id": 3, "username": "charlie", "avatar": "/avatar.jpg", "latestText": "See you!", "unreadCount": 1 },
+    { "id": 4, "username": "david", "avatar": "/avatar.jpg", "latestText": "All good here.", "unreadCount": 0 },
+    { "id": 5, "username": "emma", "avatar": "/avatar.jpg", "latestText": "Great job!", "unreadCount": 4 },
+    { "id": 6, "username": "frank", "avatar": "/avatar.jpg", "latestText": "Thanks!", "unreadCount": 0 },
+    { "id": 7, "username": "grace", "avatar": "/avatar.jpg", "latestText": "Working on it.", "unreadCount": 2 },
+    { "id": 8, "username": "henry", "avatar": "/avatar.jpg", "latestText": "No problem.", "unreadCount": 0 },
+    { "id": 9, "username": "ivy", "avatar": "/avatar.jpg", "latestText": "Sure!", "unreadCount": 1 },
+    { "id": 10, "username": "jack", "avatar": "/avatar.jpg", "latestText": "On the way.", "unreadCount": 0 },
+    { "id": 11, "username": "kate", "avatar": "/avatar.jpg", "latestText": "Yes, definitely.", "unreadCount": 3 },
+    { "id": 12, "username": "leo", "avatar": "/avatar.jpg", "latestText": "Haha good one.", "unreadCount": 0 }
+  ],
+  "chats": [
+    {
+      "chatId": 1001,
+      "participants": ["alice", "bob"],
+      "messages": [
+        { "id": "m1", "sender": "alice", "receiver": "bob", "text": "Hey Bob!", "timestamp": "2025-04-02T10:00:00Z" },
+        { "id": "m2", "sender": "bob", "receiver": "alice", "text": "Hey Alice!", "timestamp": "2025-06-03T10:01:00Z" },
+        { "id": "m3", "sender": "alice", "receiver": "bob", "text": "What's up?", "timestamp": "2025-06-03T10:02:00Z" },
+        { "id": "m4", "sender": "bob", "receiver": "alice", "text": "All good. You?", "timestamp": "2025-06-03T10:03:00Z" },
+        { "id": "m5", "sender": "alice", "receiver": "bob", "text": "Pretty busy lately.", "timestamp": "2025-06-03T10:04:00Z" },
+        { "id": "m6", "sender": "bob", "receiver": "alice", "text": "Same here.", "timestamp": "2025-06-03T10:05:00Z" },
+        { "id": "m7", "sender": "alice", "receiver": "bob", "text": "Have you seen the new project?", "timestamp": "2025-06-03T10:06:00Z" },
+        { "id": "m8", "sender": "bob", "receiver": "alice", "text": "Not yet. Is it good?", "timestamp": "2025-06-03T10:07:00Z" },
+        { "id": "m9", "sender": "alice", "receiver": "bob", "text": "Yeah, looks promising.", "timestamp": "2025-06-03T10:08:00Z" },
+        { "id": "m10", "sender": "bob", "receiver": "alice", "text": "Nice, send me the link?", "timestamp": "2025-06-03T10:09:00Z" },
+        { "id": "m11", "sender": "alice", "receiver": "bob", "text": "Just did!", "timestamp": "2025-06-03T10:10:00Z" },
+        { "id": "m12", "sender": "bob", "receiver": "alice", "text": "Got it, thanks!", "timestamp": "2025-06-03T10:11:00Z" },
+        { "id": "m13", "sender": "alice", "receiver": "bob", "text": "You're welcome.", "timestamp": "2025-06-03T10:12:00Z" },
+        { "id": "m14", "sender": "bob", "receiver": "alice", "text": "What time is the meeting?", "timestamp": "2025-06-03T10:13:00Z" },
+        { "id": "m15", "sender": "alice", "receiver": "bob", "text": "2 PM I think.", "timestamp": "2025-06-04T10:14:00Z" },
+        { "id": "m16", "sender": "bob", "receiver": "alice", "text": "Cool, thanks!", "timestamp": "2025-06-04T10:15:00Z" },
+        { "id": "m17", "sender": "alice", "receiver": "bob", "text": "No problem.", "timestamp": "2025-06-04T10:16:00Z" },
+        { "id": "m18", "sender": "bob", "receiver": "alice", "text": "Talk to you later!", "timestamp": "2025-06-04T10:17:00Z" },
+        { "id": "m19", "sender": "alice", "receiver": "bob", "text": "Okay, bye!", "timestamp": "2025-06-04T10:18:00Z" },
+        { "id": "m20", "sender": "bob", "receiver": "alice", "text": "See ya!", "timestamp": "2025-06-04T10:19:00Z" }
+      ]
+    }
+  ]
+}

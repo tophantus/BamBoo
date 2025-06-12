@@ -1,0 +1,142 @@
+[
+  {
+    "id": "msg1",
+    "senderId": "user1",
+    "text": "Chào bạn!",
+    "image": null,
+    "createdAt": "2025-06-06T08:00:00Z"
+  },
+  {
+    "id": "msg2",
+    "senderId": "user2",
+    "text": "Chào bạn, bạn cần hỗ trợ gì?",
+    "image": null,
+    "createdAt": "2025-06-06T08:01:00Z"
+  },
+  {
+    "id": "msg3",
+    "senderId": "user1",
+    "text": "Mình đang làm dự án chat app bằng React.",
+    "image": null,
+    "createdAt": "2025-06-06T08:02:30Z"
+  },
+  {
+    "id": "msg4",
+    "senderId": "user2",
+    "text": "Tuyệt vời! Bạn gặp khó khăn gì sao?",
+    "image": null,
+    "createdAt": "2025-06-06T08:03:15Z"
+  },
+  {
+    "id": "msg5",
+    "senderId": "user1",
+    "text": "Mình chưa hiển thị được danh sách người dùng.",
+    "image": null,
+    "createdAt": "2025-06-06T08:04:00Z"
+  },
+  {
+    "id": "msg6",
+    "senderId": "user2",
+    "text": "Bạn đã kiểm tra response từ API chưa?",
+    "image": null,
+    "createdAt": "2025-06-06T08:04:45Z"
+  },
+  {
+    "id": "msg7",
+    "senderId": "user1",
+    "text": "Rồi, nhưng `users` trong zustand lại rỗng.",
+    "image": null,
+    "createdAt": "2025-06-06T08:05:30Z"
+  },
+  {
+    "id": "msg8",
+    "senderId": "user2",
+    "text": "Bạn log trong useEffect chưa?",
+    "image": null,
+    "createdAt": "2025-06-06T08:06:10Z"
+  },
+  {
+    "id": "msg9",
+    "senderId": "user1",
+    "text": "Có, vẫn ra [] nên mình đang loay hoay.",
+    "image": null,
+    "createdAt": "2025-06-06T08:06:50Z"
+  },
+  {
+    "id": "msg10",
+    "senderId": "user2",
+    "text": "Có thể bạn đang log quá sớm, thử log sau khi setState?",
+    "image": null,
+    "createdAt": "2025-06-06T08:07:20Z"
+  },
+  {
+    "id": "msg11",
+    "senderId": "user1",
+    "text": "À đúng rồi, để mình thử useEffect khác theo dõi `users`.",
+    "image": null,
+    "createdAt": "2025-06-06T08:08:00Z"
+  },
+  {
+    "id": "msg12",
+    "senderId": "user2",
+    "text": "Chuẩn luôn 😄",
+    "image": null,
+    "createdAt": "2025-06-06T08:08:30Z"
+  },
+  {
+    "id": "msg13",
+    "senderId": "user1",
+    "text": "Btw, đây là ảnh demo chat UI của mình:",
+    "image": "https://via.placeholder.com/200x120.png?text=UI+Demo",
+    "createdAt": "2025-06-06T08:09:10Z"
+  },
+  {
+    "id": "msg14",
+    "senderId": "user2",
+    "text": "Đẹp đấy! Tailwind à?",
+    "image": null,
+    "createdAt": "2025-06-06T08:09:50Z"
+  },
+  {
+    "id": "msg15",
+    "senderId": "user1",
+    "text": "Ừ, dùng Tailwind với DaisyUI.",
+    "image": null,
+    "createdAt": "2025-06-06T08:10:20Z"
+  },
+  {
+    "id": "msg16",
+    "senderId": "user2",
+    "text": "Bạn xử lý socket realtime chưa?",
+    "image": null,
+    "createdAt": "2025-06-06T08:11:00Z"
+  },
+  {
+    "id": "msg17",
+    "senderId": "user1",
+    "text": "Rồi nhé! Mình dùng WebSocket với Spring Boot backend.",
+    "image": null,
+    "createdAt": "2025-06-06T08:11:45Z"
+  },
+  {
+    "id": "msg18",
+    "senderId": "user2",
+    "text": "Ngon lành luôn. Gửi ảnh được không?",
+    "image": null,
+    "createdAt": "2025-06-06T08:12:20Z"
+  },
+  {
+    "id": "msg19",
+    "senderId": "user1",
+    "text": null,
+    "image": "https://via.placeholder.com/180x120.png?text=Ảnh+test",
+    "createdAt": "2025-06-06T08:13:00Z"
+  },
+  {
+    "id": "msg20",
+    "senderId": "user2",
+    "text": "Test hiển thị OK rồi đó!",
+    "image": null,
+    "createdAt": "2025-06-06T08:13:45Z"
+  }
+]
