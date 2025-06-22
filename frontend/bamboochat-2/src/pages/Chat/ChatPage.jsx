@@ -11,14 +11,14 @@ import ChatContainer from '../../components/ChatContainer';
 import { useChatStore } from '../../store/useChatStore';
 
 const ChatPage = () => {
-  const {selectedUser} = useChatStore();
+  const {selectedUser, selectedRoom} = useChatStore();
   return (
     <div className='flex w-full bg-milk h-screen gap-[50px] p-[50px]'>
         <div className='flex flex-col items-center gap-[50px] bg-milk h-full w-[35%] rounded-[30px]'>
             <SideBar/>
         </div>
         <div className='flex flex-col items-center bg-paper h-full w-[65%] rounded-[30px] overflow-hidden p-3'>
-          {!selectedUser ? <NoChatSelected /> : <ChatContainer />}
+          {!selectedRoom ? <NoChatSelected /> : <ChatContainer />}
         </div>
     </div>
   )

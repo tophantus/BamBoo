@@ -11,10 +11,12 @@ import { useAuthStore } from './store/useAuthStore'
 import { Loader } from 'lucide-react'
 import { connectWebSocket, disconnectWebSocket } from "./socket/socket"
 import ExplorePage from './pages/Explore/ExplorePage'
+import { useChatStore } from './store/useChatStore'
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, setOnlineUsers } = useAuthStore();
   const [prevUser, setPrevUser] = useState(null);
+  const { getAllRooms } = useChatStore();
   useEffect(() => {
     checkAuth();
   }, [])
@@ -22,6 +24,7 @@ const App = () => {
   useEffect(() => {
     console.log("authUser changed:", authUser);
     if (authUser) {
+      getAllRooms(authUser.id);
       connectWebSocket(authUser, setOnlineUsers);
       setPrevUser(authUser);
     } else {

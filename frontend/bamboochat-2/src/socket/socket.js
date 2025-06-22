@@ -8,7 +8,6 @@ let stompClient = null;
 export const connectWebSocket = (user, onActiveUsersUpdate) => {
 
   const { addMessage } = useChatStore.getState();
-
   console.log("Try connecting WebSocket", { stompClient, user });
   if (stompClient || !user) return;
 
@@ -24,6 +23,7 @@ export const connectWebSocket = (user, onActiveUsersUpdate) => {
         onActiveUsersUpdate(users);
       });
 
+      console.log("Subscribing to /user/queue/messages");
       stompClient.subscribe("/user/queue/messages", (message) => {
         const privateMessage = JSON.parse(message.body);
         console.log("Connected to private")
@@ -31,6 +31,12 @@ export const connectWebSocket = (user, onActiveUsersUpdate) => {
         addMessage(privateMessage)
       });
 
+      stompClient.subscribe("/user/queue/group", (message) => {
+        const groupMessage = JSON.parse(message.body);
+        console.log("connect to group")
+        console.log("groupMessage received: ", groupMessage);
+        addMessage(groupMessage)
+      })
       stompClient.publish({
         destination: "/app/user/connect",
         body: JSON.stringify(user),
@@ -46,6 +52,7 @@ export const connectWebSocket = (user, onActiveUsersUpdate) => {
 
   stompClient.activate();
 };
+
 
 export const disconnectWebSocket = (user) => {
   if (stompClient && user) {
@@ -65,6 +72,15 @@ export const sendPrivateMessage = (message) => {
 
   stompClient.publish({
     destination: "/app/chat/private",
+    body: JSON.stringify(message)
+  });
+}
+
+export const sendGroupMessage = (message) => {
+  if (!stompClient || !stompClient.connected) return;
+
+  stompClient.publish({
+    destination: "/app/chat/group",
     body: JSON.stringify(message)
   });
 }

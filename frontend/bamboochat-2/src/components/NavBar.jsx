@@ -1,4 +1,4 @@
-import { Home, MessageCircle, Settings, LogOut } from 'lucide-react';
+import { Home, MessageCircle, Settings, LogOut, Users } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 import { useNavigate, NavLink } from 'react-router-dom';
 
@@ -36,6 +36,9 @@ const NavBar = ({img}) => {
             </NavLink>
             <NavLink to={"/settings"} className={navLinkClass}>
               <Settings size={25} />
+            </NavLink>
+            <NavLink to={"/explore"} className={navLinkClass}>
+              <Users size={25}/>
             </NavLink>
           
         </div>

@@ -4,18 +4,37 @@ import { Annoyed, User } from 'lucide-react';
 import { useAuthStore } from '../store/useAuthStore';
 
 const SideBar = () => {
-    const {getUsers, selectedUser, setSelectedUser, isUsersLoading} = useChatStore();
+    const {getUsers, getAllRooms, selectedUser, setSelectedUser, setSelectedRoom, selectedRoom, isUsersLoading, pendingMessages, removePendingMessage} = useChatStore();
     const users = useChatStore((state) => state.users);
+    const rooms = useChatStore((state) => state.rooms);
+    const authUser = useAuthStore((state) => state.authUser);
     const { onlineUsers } = useAuthStore();
     const [showOnlineOnly, setShowOnlineOnly] = useState(false);
     useEffect (() => {
-        getUsers();
+        //getUsers();
+        getAllRooms(authUser.id)
     }, [])
 
 
     const filteredUsers = showOnlineOnly
         ? users?.filter((user) => onlineUsers.some((onlineUser) => onlineUser.id === user.id))
         : users;
+
+    const filteredRooms = showOnlineOnly
+      ? rooms?.filter((room) => 
+          room?.members?.some((member) => 
+            member?.user?.id != authUser.id && 
+            onlineUsers?.some((online) => online?.id == member.user.id)
+          )
+        )
+      : rooms;
+
+    const onlineRooms = rooms?.filter((room) => 
+          room?.members?.some((member) => 
+            member?.user?.id != authUser.id && 
+            onlineUsers?.some((online) => online?.id == member.user.id)
+          )
+        )
 
 
   return (
@@ -36,12 +55,12 @@ const SideBar = () => {
             />
             <span className="text-sm">Show online only</span>
           </label>
-          <span className="text-xs text-oldBamboo">({onlineUsers.length - 1 >= 0 ? onlineUsers.length - 1 : 0} online)</span>
+          <span className="text-xs text-oldBamboo">({onlineUsers?.length - 1 >= 0 ? onlineUsers?.length - 1 : 0} online)</span>
         </div>
       </div>
 
       <div className="overflow-y-auto w-full h-full py-3">
-        {filteredUsers.map((user) => (
+        {/* {filteredUsers.map((user) => (
           <button
             key={user?.id}
             onClick={() => setSelectedUser(user)}
@@ -65,7 +84,6 @@ const SideBar = () => {
               )}
             </div>
 
-            {/* User info - only visible on larger screens */}
             <div className={`hidden lg:block text-left min-w-0 ${selectedUser?.id === user.id ? "text-bamboo" : "text-milk"}`}>
               <div className="font-medium truncate">{user.firstName +" "+ user.lastName}</div>
               <div className="text-sm">
@@ -73,9 +91,76 @@ const SideBar = () => {
               </div>
             </div>
           </button>
-        ))}
+        ))} */}
 
-        {filteredUsers.length === 0 && (
+        {/* {filteredUsers.length === 0 && (
+            <div className="flex flex-col w-full h-full items-center gap-2 text-milk py-6">
+                <p>No online users</p>
+                <div className='w-full h-full p-4 flex justify-center items-center'>
+                    <div className='w-full h-full max-w-[200px] max-h-[200px] bg-paper rounded-[25px] text-bamboo flex justify-center items-center'>
+                        <Annoyed className='h-16 w-16 animate-bounce'/>
+                    </div>
+                </div>
+            </div>
+        )} */}
+
+        {filteredRooms.map((room) => {
+
+          const numOfPendingMessage = pendingMessages.filter((msg) => 
+            msg.roomId === room.id
+          ).length;
+          return (
+            <button
+              key={room?.id}
+              onClick={() => setSelectedRoom(room)}
+              className={`
+                relative w-full p-3 flex items-center gap-3
+                hover:bg-oldBamboo bg-opacity-80 transition-colors
+                ${selectedRoom?.id === room.id ? "bg-oldBamboo" : ""}
+              `}
+            >
+              <div className="relative mx-auto lg:mx-0">
+                <img
+                  src={room?.members[0]?.user?.profilePic || "/avatar.png"}
+                  alt={room.name}
+                  className="size-12 object-cover rounded-full"
+                />
+                {onlineRooms.some((onlineRoom) => onlineRoom.id === room.id) && (
+                  <span
+                    className="absolute bottom-0 right-0 size-3 bg-green-500 
+                    rounded-full ring-2 ring-zinc-900"
+                  />
+                )}
+              </div>
+
+              {/* User info - only visible on larger screens */}
+              <div className={`hidden lg:block text-left min-w-0 ${selectedRoom?.id === room.id ? "text-bamboo" : "text-milk"}`}>
+                <div className="font-medium truncate">
+                  {room.privateChat 
+                    ? (() => {
+                        const user = room?.members?.find(m => m?.user?.id !== authUser.id)?.user;
+                        return `${user?.lastName ?? ""} ${user?.firstName ?? ""}`;
+                      })()
+                    : room.name
+                  }
+                </div>
+                <div className="text-sm">
+                  {onlineRooms.some((onlineRoom) => onlineRoom.id === room.id) ? "Online" : "Offline"}
+                </div>
+              </div>
+              {numOfPendingMessage > 0 && (
+                <span 
+                  className="absolute top-1 right-1 bg-red-500 text-white text-xs font-bold 
+                  rounded-full min-w-[1.25rem] h-5 px-1.5 flex items-center justify-center shadow-md"
+                >
+                  {numOfPendingMessage > 9 ? '9+' : numOfPendingMessage}
+                </span>
+              )}
+            </button>
+          )})
+        }
+
+        {filteredRooms.length === 0 && (
             <div className="flex flex-col w-full h-full items-center gap-2 text-milk py-6">
                 <p>No online users</p>
                 <div className='w-full h-full p-4 flex justify-center items-center'>
