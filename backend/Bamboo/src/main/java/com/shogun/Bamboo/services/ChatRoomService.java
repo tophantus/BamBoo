@@ -2,9 +2,14 @@ package com.shogun.Bamboo.services;
 
 import com.shogun.Bamboo.auth.entities.User;
 import com.shogun.Bamboo.auth.services.CustomUserDetailsService;
+import com.shogun.Bamboo.dtos.ChatMessageDto;
+import com.shogun.Bamboo.dtos.ChatRoomDto;
+import com.shogun.Bamboo.entities.ChatMessage;
 import com.shogun.Bamboo.entities.ChatRoom;
 import com.shogun.Bamboo.entities.ChatRoomMember;
 import com.shogun.Bamboo.exceptions.ResourcesNotFoundEx;
+import com.shogun.Bamboo.mappers.ChatMessageMapper;
+import com.shogun.Bamboo.mappers.ChatRoomMapper;
 import com.shogun.Bamboo.repositories.ChatMessageRepository;
 import com.shogun.Bamboo.repositories.ChatRoomMemberRepository;
 import com.shogun.Bamboo.repositories.ChatRoomRepository;
@@ -22,29 +27,38 @@ import java.util.UUID;
 public class ChatRoomService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatRoomMemberRepository chatRoomMemberRepository;
+    private final ChatMessageRepository chatMessageRepository;
     private final CustomUserDetailsService userDetailsService;
+    private final ChatRoomMapper chatRoomMapper;
+    private final ChatMessageMapper chatMessageMapper;
 
 
-    public List<ChatRoom> getAllRoomsForUser(UUID userId) {
-        return chatRoomRepository.findAllByUserId(userId);
+    public List<ChatRoomDto> getAllRoomsForUser(UUID userId) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findAllByUserId(userId);
+        return chatRoomMapper.toDtoList(chatRooms);
     }
 
-    public ChatRoom createGroupChat(String name, UUID creatorId, List<UUID> memberIds) throws BadRequestException {
-        if (memberIds.size() <= 2) {
+    public List<ChatMessageDto> getMessagesByRoomId(UUID roomId) {
+        List<ChatMessage> chatMessages =  chatMessageRepository.findAllByRoomId(roomId);
+        return chatMessageMapper.toDtoList(chatMessages);
+    }
+
+    public ChatRoomDto createGroupChat(String name, UUID creatorId, List<UUID> memberIds) throws BadRequestException {
+        if (memberIds.size() < 2) {
             throw new BadRequestException("Cannot create group under 2 members");
         }
         User creator = userDetailsService.findByIdWithAuthorities(creatorId)
                 .orElseThrow(() -> new ResourcesNotFoundEx("User with id " + creatorId + " not found"));
         ChatRoom chatRoom = ChatRoom.builder()
                 .name(name)
-                .isPrivate(false)
+                .privateChat(false)
                 .build();
         List<ChatRoomMember> members = new ArrayList<>();
 
         ChatRoomMember creatorMember = ChatRoomMember.builder()
                 .room(chatRoom)
                 .user(creator)
-                .isAdmin(true)
+                .admin(true)
                 .build();
         members.add(creatorMember);
 
@@ -56,20 +70,21 @@ public class ChatRoomService {
             ChatRoomMember chatRoomMember = ChatRoomMember.builder()
                     .room(chatRoom)
                     .user(member)
-                    .isAdmin(false)
+                    .admin(false)
                     .build();
             members.add(chatRoomMember);
         }
 
         chatRoom.setMembers(members);
 
-        return chatRoomRepository.save(chatRoom);
+        ChatRoom savedChatRoom = chatRoomRepository.save(chatRoom);
+        return chatRoomMapper.toDto(savedChatRoom);
     }
 
     public void addMemberToGroup(UUID roomId, UUID requesterId, UUID userId) throws AccessDeniedException, BadRequestException {
         ChatRoom room = chatRoomRepository.findWithMembersById(roomId)
                 .orElseThrow(() -> new ResourcesNotFoundEx("Room with id " + roomId + " not found"));
-        boolean isAdmin = chatRoomMemberRepository.existsByRoomIdAndUserIdAndIsAdminTrue(roomId, requesterId);
+        boolean isAdmin = chatRoomMemberRepository.existsByRoomIdAndUserIdAndAdminTrue(roomId, requesterId);
         if (!isAdmin) {
             throw new AccessDeniedException("Only admin can add members");
         }
@@ -83,7 +98,7 @@ public class ChatRoomService {
 
         ChatRoomMember chatRoomMember = ChatRoomMember.builder()
                 .room(room)
-                .isAdmin(false)
+                .admin(false)
                 .user(newMember)
                 .build();
 
@@ -94,7 +109,7 @@ public class ChatRoomService {
     public void addNewAdmin(UUID roomId, UUID requesterId, UUID userId) throws AccessDeniedException, BadRequestException {
         ChatRoom room = chatRoomRepository.findWithMembersById(roomId)
                 .orElseThrow(() -> new ResourcesNotFoundEx("Room with id " + roomId + " not found"));
-        boolean isAdmin = chatRoomMemberRepository.existsByRoomIdAndUserIdAndIsAdminTrue(roomId, requesterId);
+        boolean isAdmin = chatRoomMemberRepository.existsByRoomIdAndUserIdAndAdminTrue(roomId, requesterId);
         if (!isAdmin) {
             throw new AccessDeniedException("Only admin can add new Admin");
         }
@@ -102,7 +117,7 @@ public class ChatRoomService {
         if (!chatRoomMemberRepository.existsByRoomIdAndUserId(roomId, userId)) {
             throw new BadRequestException("User is not a member");
         }
-        if (chatRoomMemberRepository.existsByRoomIdAndUserIdAndIsAdminTrue(roomId, userId)) {
+        if (chatRoomMemberRepository.existsByRoomIdAndUserIdAndAdminTrue(roomId, userId)) {
             throw new BadRequestException("User is already an admin");
         }
 
@@ -118,21 +133,28 @@ public class ChatRoomService {
     public ChatRoom createPrivateRoom(User sender, User recipient) {
         ChatRoom chatRoom = ChatRoom.builder()
                 .name("PRIVATE CHAT")
-                .isPrivate(true)
+                .privateChat(true)
                 .build();
         ChatRoomMember chatRoomMemberA = ChatRoomMember.builder()
                 .room(chatRoom)
                 .user(sender)
-                .isAdmin(false)
+                .admin(false)
                 .build();
         ChatRoomMember chatRoomMemberB = ChatRoomMember.builder()
                 .room(chatRoom)
                 .user(recipient)
-                .isAdmin(false)
+                .admin(false)
                 .build();
         chatRoom.setMembers(List.of(chatRoomMemberA, chatRoomMemberB));
 
         return chatRoomRepository.save(chatRoom);
     }
 
+    public void removeChatRoom(UUID roomId, UUID requesterId) throws AccessDeniedException {
+//        boolean isAdmin = chatRoomMemberRepository.existsByRoomIdAndUserIdAndAdminTrue(roomId, requesterId);
+//        if (!isAdmin) {
+//            throw new AccessDeniedException("Only admin can delete this room");
+//        }
+        chatRoomRepository.deleteById(roomId);
+    }
 }

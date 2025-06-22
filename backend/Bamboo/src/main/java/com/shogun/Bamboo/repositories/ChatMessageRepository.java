@@ -11,14 +11,13 @@ import java.util.UUID;
 
 @Repository
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, UUID> {
-    List<ChatMessage> findByRoomIdOrderByCreatedDateAsc(UUID roomId);
-    List<ChatMessage> findBySenderIdOrderByCreatedDateDesc(UUID senderId);
 
     @Query("""
         SELECT m FROM ChatMessage m
         JOIN FETCH m.sender
+        JOIN FETCH m.room
         WHERE m.room.id = :roomId
-        ORDER BY m.createdAt ASC
     """)
     List<ChatMessage> findAllByRoomId(@Param("roomId") UUID roomId);
+
 }

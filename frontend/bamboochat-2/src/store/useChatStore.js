@@ -4,12 +4,14 @@ import toast from "react-hot-toast";
 import { CHAT_API } from "../api/chatAPi";
 import { useAuthStore } from "./useAuthStore";
 import { sendPrivateMessage } from "../socket/socket";
-
+import { ROOM_API } from "../api/roomAPI";
 
 export const useChatStore = create((set, get) => ({
     messages: [],
     users: [],
+    rooms: [],
     selectedUser: null,
+    selectedRoom: null,
     isUsersLoading: false,
     isMessagesLoading: false,
     privateMessageSubscription: null,
@@ -26,11 +28,34 @@ export const useChatStore = create((set, get) => ({
             set({isUsersLoading: false});
         }
     },
+    getAllRoom: async (userId) => {
+        set({isUsersLoading : true});
+        try {
+            const res = await ROOM_API.getAllRoom(userId);
+            set({rooms : res?.data})
+        } catch(error) {
+            toast.error(error?.response?.data?.message);
+            
+        } finally {
+            set({isUsersLoading: false});
+        }
+    },
     getMessages: async (userId) => {
         set({isMessagesLoading: true});
         try {
             const res = await CHAT_API.getMessages(userId);
             set({messages: res?.data})
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        } finally {
+            set({isMessagesLoading: false});
+        }
+    },
+    getRoomMessage: async (roomId) => {
+        set({isMessagesLoading: true})
+        try {
+            const res = await ROOM_API.getRoomMessages(roomId);
+            set({messages: res?.data});
         } catch (error) {
             toast.error(error?.response?.data?.message);
         } finally {
@@ -62,6 +87,7 @@ export const useChatStore = create((set, get) => ({
         }
     },
     setSelectedUser: (selectedUser) => set({ selectedUser }),
+    setSelectedRoom: (selectedRoom) => set({ selectedRoom }),
     removeInfo: () => {
         set({
             messages: [],

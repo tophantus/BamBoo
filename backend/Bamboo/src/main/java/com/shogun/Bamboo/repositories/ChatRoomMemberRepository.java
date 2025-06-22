@@ -14,5 +14,5 @@ public interface ChatRoomMemberRepository extends JpaRepository<ChatRoomMember, 
     List<ChatRoomMember> findByUserEmail(String userEmail);
     boolean existsByRoomIdAndUserId(UUID roomId, UUID userId);
 
-    boolean existsByRoomIdAndUserIdAndIsAdminTrue(UUID roomId, UUID userId);
+    boolean existsByRoomIdAndUserIdAndAdminTrue(UUID roomId, UUID userId);
 }

@@ -14,7 +14,7 @@ import java.util.UUID;
 @Builder
 @Getter
 @Setter
-public class ChatRoom {
+public class ChatRoom extends BaseAuditEntity{
     @Id
     @GeneratedValue
     private UUID id;
@@ -23,7 +23,7 @@ public class ChatRoom {
     private String name;
 
     @Column(nullable = false)
-    private boolean isPrivate;
+    private boolean privateChat;
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<ChatMessage> messages = new ArrayList<>();

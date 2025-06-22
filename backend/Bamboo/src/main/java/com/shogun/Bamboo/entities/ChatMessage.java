@@ -1,5 +1,6 @@
 package com.shogun.Bamboo.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.shogun.Bamboo.auth.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
@@ -25,9 +26,11 @@ public class ChatMessage extends BaseAuditEntity{
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
+    @JsonIgnore
     private ChatRoom room;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "sender_id", nullable = false)
+    @JsonIgnore
     private User sender;
 }

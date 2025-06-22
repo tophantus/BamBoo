@@ -10,6 +10,7 @@ import ChatPage from './pages/Chat//ChatPage'
 import { useAuthStore } from './store/useAuthStore'
 import { Loader } from 'lucide-react'
 import { connectWebSocket, disconnectWebSocket } from "./socket/socket"
+import ExplorePage from './pages/Explore/ExplorePage'
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, setOnlineUsers } = useAuthStore();
@@ -47,6 +48,7 @@ const App = () => {
           <Route path='/chat' element= {authUser ? <ChatPage/> : <Navigate to="/login"/>}></Route>
           <Route path='/settings' element={<SettingsPage/>}></Route>
           <Route path='/profile' element={authUser ? <ProfilePage/> : <Navigate to="/login"/>}></Route>
+          <Route path='/explore' element= {<ExplorePage/>}></Route>
         </Routes>
       </div>
     </div>

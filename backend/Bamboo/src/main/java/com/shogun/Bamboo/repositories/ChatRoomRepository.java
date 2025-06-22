@@ -15,15 +15,9 @@ import java.util.UUID;
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, UUID> {
     @Query("""
         SELECT r FROM ChatRoom r
-        WHERE r.isPrivate = true AND
-              EXISTS (
-                  SELECT m1 FROM ChatRoomMember m1
-                  WHERE m1.room = r AND m1.user.id = :userId1
-              ) AND
-              EXISTS (
-                  SELECT m2 FROM ChatRoomMember m2
-                  WHERE m2.room = r AND m2.user.id = :userId2
-              )
+        WHERE r.privateChat = true AND
+        (SELECT count(m) FROM ChatRoomMember m WHERE m.room = r AND m.user.id IN (:userId1, :userId2)) = 2
+        AND (SELECT COUNT(m) FROM ChatRoomMember m WHERE m.room = r) = 2
     """)
     Optional<ChatRoom> findPrivateRoomBetweenUsers(@Param("userId1") UUID userId1,
                                                    @Param("userId2") UUID userId2);
