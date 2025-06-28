@@ -29,8 +29,8 @@ export const useExploreStore = create((set, get) => ({
     },
     onInviteChange: (invite) => {
         const {pendingInvites} = get();
-        const {getAllRooms} = useChatStore();
-        const {authUser} = useAuthStore();
+        const {getAllRooms} = useChatStore.getState();
+        const {authUser} = useAuthStore.getState();
 
         if (invite.status === 'PENDING') {
             set({pendingInvites: [...pendingInvites, invite]});

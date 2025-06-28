@@ -16,7 +16,8 @@ const InviteSearchPanel = () => {
     setSelectedInvite, 
     getAllPendingInvites,
     acceptInvite,
-    rejectInvite
+    rejectInvite,
+    sendInvite
   } = useExploreStore();
 
   const {rooms, setSelectedRoom} = useChatStore();
@@ -72,7 +73,7 @@ const InviteSearchPanel = () => {
           )
 
           const isRecipient = pendingInvites.some((i) => 
-            i.recipientId === u.id
+            i.recipientId === user.id
           )
 
           const alreadyAddFriend = rooms.some((r) => 
@@ -139,23 +140,30 @@ const InviteSearchPanel = () => {
                 }
                 {
                   !isRecipient && !isSender && !alreadyAddFriend &&
-                  <button onClick={
-                    {}
+                  <button onClick={() => {
+                      const invite = {
+                        senderId: authUser.id,
+                        recipientId: user?.id
+                      }
+                      sendInvite(invite)
+                      console.log("send Invite")
+                    }
                   }>
                     <UserPlus2/>
                   </button>
                 }
                 {isSender &&
                   <div>
-                    <button onClick={acceptInvite({
-                        inviteId: selectedInvite?.id
-                      })}
+                    <button onClick={() => {
+                      acceptInvite({
+                        inviteId: invite?.id
+                      })}}
                     >
                       <Check/>
                     </button>
-                    <button onClick={rejectInvite({
+                    <button onClick={() => {rejectInvite({
                         inviteId: selectedInvite?.id
-                      })}
+                      })}}
                     >
                       <X/>
                     </button>
@@ -213,15 +221,15 @@ const InviteSearchPanel = () => {
               </div>
               <div className='ml-auto'>
                   <div>
-                    <button onClick={acceptInvite({
+                    <button onClick={() => {acceptInvite({
                         inviteId: selectedInvite?.id
-                      })}
+                      })}}
                     >
                       <Check/>
                     </button>
-                    <button onClick={rejectInvite({
+                    <button onClick={() => {rejectInvite({
                         inviteId: selectedInvite?.id
-                      })}
+                      })}}
                     >
                       <X/>
                     </button>

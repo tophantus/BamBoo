@@ -4,6 +4,7 @@ import { useAuthStore } from '../../store/useAuthStore';
 import { Mail, MessageCircle, Phone, Square, SquareX, User, UserPlus2, X } from "lucide-react";
 import { useChatStore } from '../../store/useChatStore';
 import { useNavigate } from 'react-router-dom';
+import { sendInvite } from '../../socket/socket';
 
 const UserProfileCard = () => {
   const {selectedUser, setSelectedUser, isInviteLoading, pendingInvites} = useExploreStore();
@@ -166,7 +167,19 @@ const UserProfileCard = () => {
             </button>
           }
           {!friendStatus.isSender && !friendStatus.isRecipient && !friendStatus.alreadyAddFriend &&
-            <button className='w-[200px] flex items-center justify-center  hover:opacity-80 hover:scale-105 font-bold text-xl text-milk bg-bamboo h-[50px] rounded-[10px]' disabled={isInviteLoading}>
+            <button 
+              className='w-[200px] flex items-center justify-center  hover:opacity-80 hover:scale-105 font-bold text-xl text-milk bg-bamboo h-[50px] rounded-[10px]' disabled={isInviteLoading}
+              onClick={() => {
+                  const invite = {
+                    senderId: authUser.id,
+                    recipientId: selectedUser?.id
+                  }
+                  console.log("invite", invite)
+                  sendInvite(invite)
+                  console.log("send Invite")
+                }
+              }
+            >
               <UserPlus2/>
               INVITE
             </button>

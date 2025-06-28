@@ -38,7 +38,7 @@ export const connectWebSocket = (user, onActiveUsersUpdate, onInvitesUpdate) => 
         addMessage(groupMessage)
       });
 
-      stompClient.subscribe("user/queue/invites", (message) => {
+      stompClient.subscribe("/user/queue/invites", (message) => {
         const invite = JSON.parse(message.body);
         console.log("invite received", invite);
         onInvitesUpdate(invite);
@@ -95,6 +95,7 @@ export const sendGroupMessage = (message) => {
 export const sendInvite = (invite) => {
   if (!stompClient || !stompClient.connected) return;
 
+  console.log("socketSend")
   stompClient.publish({
     destination: "/app/invite/send",
     body: JSON.stringify(invite)
