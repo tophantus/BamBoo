@@ -104,7 +104,7 @@ const MessageInput = () => {
             </div>
             <button
                 type="submit"
-                className={`hidden sm:flex  bg-textbox p-2.5 rounded-full disabled:bg-textbox hover:scale-105 border-none hover:scale-105 text-black ${(!text.trim() && !imagePreview) ? "cursor-not-allowed  opacity-60" : ""}`}
+                className={`hidden sm:flex  bg-textbox p-2.5 rounded-full disabled:bg-textbox hover:scale-105 border-none text-black ${(!text.trim() && !imagePreview) ? "cursor-not-allowed  opacity-60" : ""}`}
                 disabled={!text.trim() && !imagePreview}
             >
                 <SendHorizonal size={22} />

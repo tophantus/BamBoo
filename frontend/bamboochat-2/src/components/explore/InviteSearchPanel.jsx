@@ -1,14 +1,32 @@
 import React, { useEffect, useState } from 'react'
 import { useExploreStore } from '../../store/useExploreStore';
-import { Users } from 'lucide-react';
+import { Check, MessageCircle, UserPlus2, Users, X } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useChatStore } from '../../store/useChatStore';
+import { useNavigate } from 'react-router-dom';
 
 const InviteSearchPanel = () => {
-  const {selectedUser, setSelectedUser, users, getUsers} = useExploreStore();
+  const {
+    selectedUser,
+    setSelectedUser, 
+    users, 
+    getUsers, 
+    pendingInvites,
+    selectedInvite, 
+    setSelectedInvite, 
+    getAllPendingInvites,
+    acceptInvite,
+    rejectInvite
+  } = useExploreStore();
+
+  const {rooms, setSelectedRoom} = useChatStore();
   const [activeTab, setActiveTab] = useState("INVITE");
-   const { onlineUsers } = useAuthStore();
+  const { onlineUsers, authUser } = useAuthStore();
+  const navigate = useNavigate();
+
   useEffect(() => {
     getUsers();
+    getAllPendingInvites(authUser?.id);
   }, [])
 
   return (
@@ -42,40 +60,177 @@ const InviteSearchPanel = () => {
         </div>
       </div>
 
+      {activeTab === "INVITE" &&
       <div className="overflow-y-auto w-full h-full py-3">
-        {users.map((user) => (
-          <button
-            key={user?.id}
-            onClick={() => setSelectedUser(user)}
-            className={`
-              w-full p-3 flex items-center gap-3
-              hover:bg-oldBamboo bg-opacity-80 transition-colors
-              ${selectedUser?.id === user.id ? "bg-oldBamboo" : ""}
-            `}
-          >
-            <div className="relative mx-auto lg:mx-0">
-              <img
-                src={user.profilePic || "/avatar.png"}
-                alt={user.lastName}
-                className="size-12 object-cover rounded-full"
-              />
-              {onlineUsers.some((onlineUser) => onlineUser.id === user.id) && (
-                <span
-                  className="absolute bottom-0 right-0 size-3 bg-green-500 
-                  rounded-full ring-2 ring-zinc-900"
-                />
-              )}
-            </div>
+        {users.map((user) => {
+          const isSender = pendingInvites.some((i) => 
+            i.senderId === user.id
+          )
 
-            <div className={`hidden lg:block text-left min-w-0 ${selectedUser?.id === user.id ? "text-bamboo" : "text-milk"}`}>
-              <div className="font-medium truncate">{user.firstName +" "+ user.lastName}</div>
-              <div className="text-sm">
-                {onlineUsers.some((onlineUser) => onlineUser.id === user.id) ? "Online" : "Offline"}
+          const invite = pendingInvites.find((i) => 
+            i.senderId === user.id
+          )
+
+          const isRecipient = pendingInvites.some((i) => 
+            i.recipientId === u.id
+          )
+
+          const alreadyAddFriend = rooms.some((r) => 
+            r.privateChat &&
+            r.members.some((m) => 
+              m.user.id === user.id
+            )
+          ) 
+
+          console.log("s", isSender, "r", isRecipient, "a", alreadyAddFriend)
+
+          return (
+            <div
+              key={user?.id}
+              onClick={() => {
+                setSelectedUser(user)
+                if (isSender) setSelectedInvite(invite)
+              }}
+              className={`
+                w-full p-3 flex items-center gap-3
+                hover:bg-oldBamboo bg-opacity-80 transition-colors
+                ${selectedUser?.id === user.id ? "bg-oldBamboo" : ""}
+              `}
+            >
+              <div className="relative mx-auto lg:mx-0">
+                <img
+                  src={user.profilePic || "/avatar.png"}
+                  alt={user.lastName}
+                  className="size-12 object-cover rounded-full"
+                />
+                {onlineUsers.some((onlineUser) => onlineUser.id === user.id) && (
+                  <span
+                    className="absolute bottom-0 right-0 size-3 bg-green-500 
+                    rounded-full ring-2 ring-zinc-900"
+                  />
+                )}
               </div>
+
+              <div className={`hidden lg:block text-left min-w-0 ${selectedUser?.id === user.id ? "text-bamboo" : "text-milk"}`}>
+                <div className="font-medium truncate">{user.firstName +" "+ user.lastName}</div>
+                <div className="text-sm">
+                  {onlineUsers.some((onlineUser) => onlineUser.id === user.id) ? "Online" : "Offline"}
+                </div>
+              </div>
+              <div className='ml-auto flex flex-row gap-2'>
+                {isRecipient &&
+                  <button>
+                    Pending...
+                  </button>
+                }
+                {alreadyAddFriend && 
+                  <button onClick={() => {
+                      const room = rooms.find((r) => 
+                        r.privateChat &&
+                        r.members.some((m) => 
+                        m.user.id === user.id
+                      ))
+                      setSelectedRoom(room);
+                      navigate("/chat")
+                    }
+                  }>
+                    <MessageCircle/>
+                  </button>  
+                }
+                {
+                  !isRecipient && !isSender && !alreadyAddFriend &&
+                  <button onClick={
+                    {}
+                  }>
+                    <UserPlus2/>
+                  </button>
+                }
+                {isSender &&
+                  <div>
+                    <button onClick={acceptInvite({
+                        inviteId: selectedInvite?.id
+                      })}
+                    >
+                      <Check/>
+                    </button>
+                    <button onClick={rejectInvite({
+                        inviteId: selectedInvite?.id
+                      })}
+                    >
+                      <X/>
+                    </button>
+                  </div>
+                }
+              </div>
+              
             </div>
-          </button>
-        ))} 
-      </div>
+        )})} 
+      </div>}
+
+      {activeTab === "PENDING" &&
+      <div className="overflow-y-auto w-full h-full py-3">
+        {users.map((user) => {
+          const isSender = pendingInvites.some((i) => 
+            i.senderId === user.id
+          )
+          const invite = pendingInvites.find((i) => 
+            i.senderId === user.id
+          )
+          return (
+            isSender ? 
+            <div
+              key={user?.id}
+              onClick={() => {
+                  setSelectedUser(user)
+                  setSelectedInvite(invite)
+                }
+              }
+              className={`
+                w-full p-3 flex items-center gap-3
+                hover:bg-oldBamboo bg-opacity-80 transition-colors
+                ${selectedUser?.id === user.id ? "bg-oldBamboo" : ""}
+              `}
+            >
+              <div className="relative mx-auto lg:mx-0">
+                <img
+                  src={user.profilePic || "/avatar.png"}
+                  alt={user.lastName}
+                  className="size-12 object-cover rounded-full"
+                />
+                {onlineUsers.some((onlineUser) => onlineUser.id === user.id) && (
+                  <span
+                    className="absolute bottom-0 right-0 size-3 bg-green-500 
+                    rounded-full ring-2 ring-zinc-900"
+                  />
+                )}
+              </div>
+
+              <div className={`hidden lg:block text-left min-w-0 ${selectedUser?.id === user.id ? "text-bamboo" : "text-milk"}`}>
+                <div className="font-medium truncate">{user.firstName +" "+ user.lastName}</div>
+                <div className="text-sm">
+                  {onlineUsers.some((onlineUser) => onlineUser.id === user.id) ? "Online" : "Offline"}
+                </div>
+              </div>
+              <div className='ml-auto'>
+                  <div>
+                    <button onClick={acceptInvite({
+                        inviteId: selectedInvite?.id
+                      })}
+                    >
+                      <Check/>
+                    </button>
+                    <button onClick={rejectInvite({
+                        inviteId: selectedInvite?.id
+                      })}
+                    >
+                      <X/>
+                    </button>
+                  </div>
+              </div>
+              
+            </div> : <></>
+        )})} 
+      </div>}
     </aside>
   )
 }

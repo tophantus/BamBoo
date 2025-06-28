@@ -5,7 +5,7 @@ import { useChatStore } from "../store/useChatStore";
 
 let stompClient = null;
 
-export const connectWebSocket = (user, onActiveUsersUpdate) => {
+export const connectWebSocket = (user, onActiveUsersUpdate, onInvitesUpdate) => {
 
   const { addMessage } = useChatStore.getState();
   console.log("Try connecting WebSocket", { stompClient, user });
@@ -36,7 +36,14 @@ export const connectWebSocket = (user, onActiveUsersUpdate) => {
         console.log("connect to group")
         console.log("groupMessage received: ", groupMessage);
         addMessage(groupMessage)
+      });
+
+      stompClient.subscribe("user/queue/invites", (message) => {
+        const invite = JSON.parse(message.body);
+        console.log("invite received", invite);
+        onInvitesUpdate(invite);
       })
+
       stompClient.publish({
         destination: "/app/user/connect",
         body: JSON.stringify(user),
@@ -82,5 +89,32 @@ export const sendGroupMessage = (message) => {
   stompClient.publish({
     destination: "/app/chat/group",
     body: JSON.stringify(message)
+  });
+}
+
+export const sendInvite = (invite) => {
+  if (!stompClient || !stompClient.connected) return;
+
+  stompClient.publish({
+    destination: "/app/invite/send",
+    body: JSON.stringify(invite)
+  });
+}
+
+export const acceptInvite = (request) => {
+  if (!stompClient || !stompClient.connected) return;
+
+  stompClient.publish({
+    destination: "/app/invite/accept",
+    body: JSON.stringify(request)
+  });
+}
+
+export const rejectInvite = (request) => {
+  if (!stompClient || !stompClient.connected) return;
+
+  stompClient.publish({
+    destination: "/app/invite/reject",
+    body: JSON.stringify(request)
   });
 }

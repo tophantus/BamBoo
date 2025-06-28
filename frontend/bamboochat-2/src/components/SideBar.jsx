@@ -11,14 +11,8 @@ const SideBar = () => {
     const { onlineUsers } = useAuthStore();
     const [showOnlineOnly, setShowOnlineOnly] = useState(false);
     useEffect (() => {
-        //getUsers();
         getAllRooms(authUser.id)
     }, [])
-
-
-    const filteredUsers = showOnlineOnly
-        ? users?.filter((user) => onlineUsers.some((onlineUser) => onlineUser.id === user.id))
-        : users;
 
     const filteredRooms = showOnlineOnly
       ? rooms?.filter((room) => 
@@ -60,49 +54,6 @@ const SideBar = () => {
       </div>
 
       <div className="overflow-y-auto w-full h-full py-3">
-        {/* {filteredUsers.map((user) => (
-          <button
-            key={user?.id}
-            onClick={() => setSelectedUser(user)}
-            className={`
-              w-full p-3 flex items-center gap-3
-              hover:bg-oldBamboo bg-opacity-80 transition-colors
-              ${selectedUser?.id === user.id ? "bg-oldBamboo" : ""}
-            `}
-          >
-            <div className="relative mx-auto lg:mx-0">
-              <img
-                src={user.profilePic || "/avatar.png"}
-                alt={user.lastName}
-                className="size-12 object-cover rounded-full"
-              />
-              {onlineUsers.some((onlineUser) => onlineUser.id === user.id) && (
-                <span
-                  className="absolute bottom-0 right-0 size-3 bg-green-500 
-                  rounded-full ring-2 ring-zinc-900"
-                />
-              )}
-            </div>
-
-            <div className={`hidden lg:block text-left min-w-0 ${selectedUser?.id === user.id ? "text-bamboo" : "text-milk"}`}>
-              <div className="font-medium truncate">{user.firstName +" "+ user.lastName}</div>
-              <div className="text-sm">
-                {onlineUsers.some((onlineUser) => onlineUser.id === user.id) ? "Online" : "Offline"}
-              </div>
-            </div>
-          </button>
-        ))} */}
-
-        {/* {filteredUsers.length === 0 && (
-            <div className="flex flex-col w-full h-full items-center gap-2 text-milk py-6">
-                <p>No online users</p>
-                <div className='w-full h-full p-4 flex justify-center items-center'>
-                    <div className='w-full h-full max-w-[200px] max-h-[200px] bg-paper rounded-[25px] text-bamboo flex justify-center items-center'>
-                        <Annoyed className='h-16 w-16 animate-bounce'/>
-                    </div>
-                </div>
-            </div>
-        )} */}
 
         {filteredRooms.map((room) => {
 
@@ -121,7 +72,13 @@ const SideBar = () => {
             >
               <div className="relative mx-auto lg:mx-0">
                 <img
-                  src={room?.members[0]?.user?.profilePic || "/avatar.png"}
+                  src={
+                    room?.privateChar 
+                      ? room?.members[0]?.user?.profilePic || "/avatar.png"
+                      : room?.members.find((m) => 
+                        m?.user?.id !== authUser?.id
+                      )?.user?.profilePic
+                  }
                   alt={room.name}
                   className="size-12 object-cover rounded-full"
                 />

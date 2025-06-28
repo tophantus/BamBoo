@@ -12,9 +12,11 @@ import { Loader } from 'lucide-react'
 import { connectWebSocket, disconnectWebSocket } from "./socket/socket"
 import ExplorePage from './pages/Explore/ExplorePage'
 import { useChatStore } from './store/useChatStore'
+import { useExploreStore } from './store/useExploreStore'
 
 const App = () => {
   const { authUser, checkAuth, isCheckingAuth, setOnlineUsers } = useAuthStore();
+  const { onInviteChange } = useExploreStore();
   const [prevUser, setPrevUser] = useState(null);
   const { getAllRooms } = useChatStore();
   useEffect(() => {
@@ -25,7 +27,7 @@ const App = () => {
     console.log("authUser changed:", authUser);
     if (authUser) {
       getAllRooms(authUser.id);
-      connectWebSocket(authUser, setOnlineUsers);
+      connectWebSocket(authUser, setOnlineUsers, onInviteChange);
       setPrevUser(authUser);
     } else {
       disconnectWebSocket(prevUser);
@@ -51,7 +53,7 @@ const App = () => {
           <Route path='/chat' element= {authUser ? <ChatPage/> : <Navigate to="/login"/>}></Route>
           <Route path='/settings' element={<SettingsPage/>}></Route>
           <Route path='/profile' element={authUser ? <ProfilePage/> : <Navigate to="/login"/>}></Route>
-          <Route path='/explore' element= {<ExplorePage/>}></Route>
+          <Route path='/explore' element={authUser ? <ExplorePage/> : <Navigate to="/login"/>}></Route>
         </Routes>
       </div>
     </div>
