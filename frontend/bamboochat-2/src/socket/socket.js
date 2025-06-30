@@ -2,12 +2,14 @@ import SockJS from "sockjs-client";
 import { Client, Stomp } from "@stomp/stompjs";
 import { WEBSOCKET_URL } from "../api/constant";
 import { useChatStore } from "../store/useChatStore";
+import { useExploreStore } from "../store/useExploreStore";
 
 let stompClient = null;
 
 export const connectWebSocket = (user, onActiveUsersUpdate, onInvitesUpdate) => {
 
   const { addMessage } = useChatStore.getState();
+  const { onRemovePrivateRoom } = useExploreStore.getState();
   console.log("Try connecting WebSocket", { stompClient, user });
   if (stompClient || !user) return;
 
@@ -42,6 +44,11 @@ export const connectWebSocket = (user, onActiveUsersUpdate, onInvitesUpdate) => 
         const invite = JSON.parse(message.body);
         console.log("invite received", invite);
         onInvitesUpdate(invite);
+      })
+
+      stompClient.subscribe("/user/queue/room-remove", (message) => {
+        console.log("update Invite")
+        onRemovePrivateRoom(message);
       })
 
       stompClient.publish({
@@ -116,6 +123,15 @@ export const rejectInvite = (request) => {
 
   stompClient.publish({
     destination: "/app/invite/reject",
+    body: JSON.stringify(request)
+  });
+}
+
+export const removeRoomChat = (request) => {
+  if (!stompClient || !stompClient.connected) return;
+
+  stompClient.publish({
+    destination: "/app/room/remove",
     body: JSON.stringify(request)
   });
 }

@@ -28,9 +28,9 @@ const LoginPage = () => {
 
 
   return (
-    <div className='flex w-full bg-milk h-screen gap-[50px] p-[50px]'>
+    <div className='flex w-full bg-milk h-screen gap-[10px] px-[10px] pb-[10px] lg:p-[10px]'>
         {/* Login */}
-        <div className='flex flex-col items-center bg-bamboo h-full w-1/2 rounded-[30px]'>
+        <div className='flex flex-col items-center border bg-bamboo h-full w-full lg:w-1/2 rounded-[10px]'>
             <div className='px-[40px] pt-[90px] w-full'>
                 <h1 className='text-milk font-bold text-4xl'>
                     Sign In
@@ -71,7 +71,7 @@ const LoginPage = () => {
                         <div className='w-full flex justify-end text-milk hover:text-oldBamboo underline'>
                             <Link to={"/register"}>Don't have an account? Sign Up</Link>
                         </div>
-                        <button type='submit' className='w-full flex items-center justify-center gap-1 hover:opacity-80 font-bold text-xl text-bamboo bg-milk h-[50px] rounded-[10px]' disabled={isLoggingIn}>
+                        <button type='submit' className='w-full flex hover:scale-105 items-center justify-center gap-1 hover:opacity-80 font-bold text-xl text-bamboo bg-milk h-[50px] rounded-[10px]' disabled={isLoggingIn}>
                             {isLoggingIn ? (
                                 <>
                                     <Loader2 className="h-5 w-5 animate-spin text-milk" />
@@ -87,7 +87,7 @@ const LoginPage = () => {
             </div>
         </div>
         {/* logo */}
-        <div className='flex flex-col items-center justify-center bg-paper w-1/2 h-full rounded-[30px]'>
+        <div className='hidden lg:flex flex-col items-center justify-center bg-paper w-1/2 h-full rounded-[10px]'>
             <img src={bambooSvg} alt="bamboo and panda" className='w-[500px] h-[500px]'/>
             <h1 className='font-bold text-4xl text-bamboo'>
                 BAMBOO CHAT

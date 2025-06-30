@@ -65,7 +65,7 @@ export const useChatStore = create((set, get) => ({
     },
     addMessage: (message) => {
         const {selectedRoom, messages, pendingMessages} = get();
-        if (message.roomId === selectedRoom.id) {
+        if (message.roomId === selectedRoom?.id) {
             set({ messages: [...messages, message] });
         } else {
             set({ pendingMessages: [...pendingMessages, message] });

@@ -42,8 +42,8 @@ const App = () => {
   )
   return (
     <div>
-      <div className='flex w-screen bg-milk h-screen overflow-auto'>
-        <div className='flex flex-col items-center justify-center bg-bamboo w-flex min-w-[80px] ms-[50px] my-[50px] h-flex rounded-[30px]'>
+      <div className='flex flex-col lg:flex-row w-screen bg-milk h-screen overflow-auto'>
+        <div className='flex flex-col items-center justify-center mx-[10px] lg:m-0 lg:ms-[10px] w-flex min-w-[80px] h-flex rounded-[10px]'>
             <NavBar img={authUser?.profilePic}/>
         </div>
         <Routes>

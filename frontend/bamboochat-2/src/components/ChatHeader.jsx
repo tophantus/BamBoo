@@ -17,7 +17,7 @@ const ChatHeader = () => {
   )?.user
 
   return (
-    <div className="ps-3 pe-4 py-2.5 flex w-full bg-bamboo rounded-[25px] ">
+    <div className="ps-3 pe-4 py-2.5 flex w-full bg-bamboo rounded-[10px] ">
       <div className="flex items-center w-full justify-between">
         <div className="flex items-center gap-3">
           {/* Avatar */}

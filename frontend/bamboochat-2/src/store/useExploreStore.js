@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { INVITE_API } from "../api/inviteAPI";
 import { useAuthStore } from "./useAuthStore";
 import { useChatStore } from "./useChatStore";
-import { acceptInvite, rejectInvite, sendInvite } from "../socket/socket";
+import { acceptInvite, rejectInvite, removeRoomChat, sendInvite } from "../socket/socket";
 
 export const useExploreStore = create((set, get) => ({
     users: [],
@@ -93,5 +93,24 @@ export const useExploreStore = create((set, get) => ({
         } finally {
             set({isInviteLoading: false});
         }
+    },
+    removePrivateChatRoom: (request) => {
+        set({isInviteLoading: true});
+        try {
+            removeRoomChat(request)
+            toast.success("Đã unfriend thành công")
+        } catch(error) {
+            toast.error(error?.response?.data?.message);
+        } finally {
+            set({isInviteLoading: false});
+        }
+    },
+    onRemovePrivateRoom: (response) => {
+        const {getAllRooms} = useChatStore.getState();
+        const {authUser} = useAuthStore.getState();
+        const {getAllPendingInvites} = get();
+        
+        getAllRooms(authUser.id);
+        getAllPendingInvites(authUser.id)
     },
 }))

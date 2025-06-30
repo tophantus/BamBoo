@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { useExploreStore } from '../../store/useExploreStore'
 import { useAuthStore } from '../../store/useAuthStore';
-import { Mail, MessageCircle, Phone, Square, SquareX, User, UserPlus2, X } from "lucide-react";
+import { Mail, MessageCircle, Phone, Square, SquareX, User, UserMinus2, UserPlus2, X } from "lucide-react";
 import { useChatStore } from '../../store/useChatStore';
 import { useNavigate } from 'react-router-dom';
 import { sendInvite } from '../../socket/socket';
 
 const UserProfileCard = () => {
-  const {selectedUser, setSelectedUser, isInviteLoading, pendingInvites} = useExploreStore();
+  const {selectedUser, setSelectedUser, isInviteLoading, pendingInvites, removePrivateChatRoom} = useExploreStore();
   const { onlineUsers, authUser } = useAuthStore();
   const {rooms, setSelectedRoom} = useChatStore();
 
@@ -53,7 +53,7 @@ const UserProfileCard = () => {
   
   return (
     <div className="flex-1 w-full flex flex-col overflow-auto ">
-      <div className="ps-3 pe-4 py-2.5 flex w-full bg-bamboo rounded-[25px] ">
+      <div className="ps-3 pe-4 py-2.5 flex w-full bg-bamboo rounded-[10px] ">
         <div className="flex items-center w-full justify-between">
           <div className="flex items-center gap-3">
             {/* Avatar */}
@@ -81,7 +81,7 @@ const UserProfileCard = () => {
         </div>
       </div>
 
-      <div className='flex flex-col items-center bg-paper h-full scrollbar-hide overflow-auto w-full max-w-[1000px] rounded-[30px]'>
+      <div className='flex flex-col items-center bg-paper h-full scrollbar-hide overflow-auto w-full max-w-[1000px] rounded-[10px]'>
              {/* avatar upload section */}
             <div className="flex flex-col items-center pt-8 gap-4">
               <div className="relative">
@@ -150,8 +150,9 @@ const UserProfileCard = () => {
             </button>
           }
           {friendStatus.alreadyAddFriend &&
+            <>
             <button 
-              className='w-[200px] flex items-center justify-center  hover:opacity-80 hover:scale-105 font-bold text-xl text-milk bg-bamboo h-[50px] rounded-[10px]' disabled={isInviteLoading}
+              className='w-[200px] flex items-center justify-center gap-1 hover:opacity-80 hover:scale-105 font-bold text-xl text-milk bg-bamboo h-[50px] rounded-[10px]' disabled={isInviteLoading}
               onClick={() => {
                 const room = rooms.find((r) => 
                   r.privateChat &&
@@ -165,6 +166,25 @@ const UserProfileCard = () => {
               <MessageCircle/>
               CHAT
             </button>
+            <button 
+              className='w-[200px] flex items-center justify-center gap-1 hover:opacity-80 hover:scale-105 font-bold text-xl text-milk bg-bamboo h-[50px] rounded-[10px]' disabled={isInviteLoading}
+              onClick={() => {
+                const room = rooms.find((r) => 
+                  r.privateChat &&
+                  r.members.some((m) => 
+                  m.user.id === selectedUser?.id
+                ))
+                const request = {
+                  roomId: room?.id,
+                  requesterId: authUser?.id
+                }
+                removePrivateChatRoom(request);
+              }}
+            >
+              <UserMinus2/>
+              UNFRIEND
+            </button>
+            </>
           }
           {!friendStatus.isSender && !friendStatus.isRecipient && !friendStatus.alreadyAddFriend &&
             <button 

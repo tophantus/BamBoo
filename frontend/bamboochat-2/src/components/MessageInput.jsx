@@ -61,7 +61,7 @@ const MessageInput = () => {
 
 
   return (
-    <div className='p-4 w-full flex flex-col items-center'>
+    <div className='w-full flex flex-col items-center'>
         {imagePreview &&(
             <div className='mb-3 flex items-center gap-2'>
                 <div className='relative'>
@@ -95,7 +95,7 @@ const MessageInput = () => {
                 />
                 <button
                     type="button"
-                    className={`hidden sm:flex btn bg-textbox btn-circle border-none hover:scale-105
+                    className={`flex btn bg-textbox btn-circle border-none hover:bg-bamboo
                             ${imagePreview ? "bg-bamboo" : "text-black"}`}
                     onClick={() => fileInputRef.current?.click()}
                 >
@@ -104,7 +104,7 @@ const MessageInput = () => {
             </div>
             <button
                 type="submit"
-                className={`hidden sm:flex  bg-textbox p-2.5 rounded-full disabled:bg-textbox hover:scale-105 border-none text-black ${(!text.trim() && !imagePreview) ? "cursor-not-allowed  opacity-60" : ""}`}
+                className={`hidden sm:flex  bg-textbox p-2.5 rounded-full disabled:bg-textbox hover:bg-bamboo border-none text-black ${(!text.trim() && !imagePreview) ? "cursor-not-allowed  opacity-60" : ""}`}
                 disabled={!text.trim() && !imagePreview}
             >
                 <SendHorizonal size={22} />

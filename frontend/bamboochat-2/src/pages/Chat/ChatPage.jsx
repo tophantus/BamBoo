@@ -13,11 +13,11 @@ import { useChatStore } from '../../store/useChatStore';
 const ChatPage = () => {
   const {selectedUser, selectedRoom} = useChatStore();
   return (
-    <div className='flex w-full bg-milk h-screen gap-[50px] p-[50px]'>
-        <div className='flex flex-col items-center gap-[50px] bg-milk h-full w-[35%] rounded-[30px]'>
+    <div className='flex w-full bg-milk h-full gap-[10px] p-[10px] overflow-hidden'>
+        <div className='flex flex-col items-center gap-[10px] bg-milk h-full lg:w-[35%] rounded-[10px]'>
             <SideBar/>
         </div>
-        <div className='flex flex-col items-center bg-paper h-full w-[65%] rounded-[30px] overflow-hidden p-3'>
+        <div className='flex flex-col items-center bg-paper h-full w-full lg:w-[65%] rounded-[10px] overflow-hidden p-3'>
           {!selectedRoom ? <NoChatSelected /> : <ChatContainer />}
         </div>
     </div>

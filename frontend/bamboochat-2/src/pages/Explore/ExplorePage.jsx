@@ -7,11 +7,11 @@ import { useExploreStore } from '../../store/useExploreStore'
 const ExplorePage = () => {
   const {selectedUser} = useExploreStore();
   return (
-    <div className='flex w-full bg-milk h-screen gap-[50px] p-[50px]'>
-        <div className='flex flex-col items-center gap-[50px] bg-milk h-full w-[35%] rounded-[30px]'>
+    <div className='flex w-full bg-milk h-screen gap-[10px] p-[10px]'>
+        <div className='flex flex-col items-center gap-[10px] bg-milk h-full w-full lg:w-[35%] rounded-[10px]'>
             <InviteSearchPanel/>
         </div>
-        <div className='flex flex-col items-center bg-paper h-full w-[65%] rounded-[30px] overflow-hidden p-3'>
+        <div className='hidden lg:flex flex-col items-center bg-paper h-full w-full lg:w-[65%] rounded-[10px] overflow-hidden p-3'>
           {!selectedUser ? <NoUserSelected /> : <UserProfileCard />}
         </div>
     </div>

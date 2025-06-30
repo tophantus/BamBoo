@@ -42,9 +42,9 @@ const ProfilePage = () => {
     setIsEditInfo(false);
   }
   return (
-    <div className='flex justify-center w-full bg-milk min-h-screen gap-[50px] p-[50px]'>
+    <div className='flex justify-center w-full bg-milk h-full lg:min-h-screen gap-[10px] p-[10px]'>
         {/* Login */}
-        <div className='flex flex-col items-center bg-paper h-full scrollbar-hide overflow-auto w-full max-w-[1000px] rounded-[30px]'>
+        <div className='flex flex-col items-center bg-paper h-full scrollbar-hide overflow-auto w-full lg:max-w-[1000px] rounded-[10px]'>
             <div className='px-[40px] pt-[40px] w-full'>
                 <div className="text-center text-black">
                   <h1 className="font-bold text-4xl text-black">Profile</h1>

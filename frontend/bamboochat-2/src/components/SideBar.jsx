@@ -17,22 +17,30 @@ const SideBar = () => {
     const filteredRooms = showOnlineOnly
       ? rooms?.filter((room) => 
           room?.members?.some((member) => 
-            member?.user?.id != authUser.id && 
-            onlineUsers?.some((online) => online?.id == member.user.id)
+            member?.user?.id !== authUser.id && 
+            onlineUsers?.some((online) => online?.id === member.user.id)
           )
         )
       : rooms;
 
     const onlineRooms = rooms?.filter((room) => 
           room?.members?.some((member) => 
-            member?.user?.id != authUser.id && 
-            onlineUsers?.some((online) => online?.id == member.user.id)
+            member?.user?.id !== authUser.id && 
+            onlineUsers?.some((online) => online?.id === member.user.id)
           )
         )
+    const onlineNum = onlineUsers?.filter((o) => 
+      rooms?.some((r) => 
+        r?.members?.some((m) => 
+          m?.user?.id === o?.id &&
+          m?.user?.id !== authUser?.id
+        )
+      )
+    ).length
 
 
   return (
-    <aside className="h-full w-20 lg:w-full lg:w-max-[300px] bg-bamboo flex flex-col rounded-[30px] transition-all duration-200">
+    <aside className="h-full w-20 lg:w-full lg:w-max-[300px] bg-bamboo flex flex-col rounded-[10px] transition-all duration-200">
       <div className="border-b border-base-100 border-oldBamboo w-full p-5">
         <div className="flex items-center gap-2 text-milk">
           <User className="size-6" />
@@ -49,7 +57,7 @@ const SideBar = () => {
             />
             <span className="text-sm">Show online only</span>
           </label>
-          <span className="text-xs text-oldBamboo">({onlineUsers?.length - 1 >= 0 ? onlineUsers?.length - 1 : 0} online)</span>
+          <span className="text-xs text-oldBamboo">({onlineNum >= 0 ? onlineNum : 0} online)</span>
         </div>
       </div>
 
