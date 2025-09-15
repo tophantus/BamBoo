@@ -23,10 +23,12 @@ const MessagesList = () => {
       if (selectedRoom?.id) {
         getRoomMessages(selectedRoom.id)
         console.log("getMessages");
+      
       }
     }, [selectedRoom.id, getRoomMessages])
 
     const messageEndRef = useRef(null);
+    console.log(messages)
 
     useEffect(() => {
         if (messageEndRef.current && messages) {

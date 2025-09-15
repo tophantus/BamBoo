@@ -3,7 +3,6 @@ package com.shogun.Bamboo.entities;
 import com.shogun.Bamboo.auth.entities.User;
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.util.UUID;
 

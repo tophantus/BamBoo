@@ -10,6 +10,7 @@ export const useExploreStore = create((set, get) => ({
     users: [],
     selectedUser: null,
     pendingInvites: [],
+    sentInvites: [],
     selectedInvite: null,
     isUsersLoading: false,
     isInviteLoading: false,
@@ -51,6 +52,7 @@ export const useExploreStore = create((set, get) => ({
         set({isInviteLoading : true});
         try {
             const res = await INVITE_API.getAllPendingInvite(userId);
+            console.log(res)
             set({pendingInvites : res.data})
         } catch(error) {
             toast.error(error?.response?.data?.message);
@@ -59,6 +61,19 @@ export const useExploreStore = create((set, get) => ({
             set({isInviteLoading: false});
         }
     },
+    getAllSentInvites: async (userId) => {
+        set({ isInviteLoading: true });
+        try {
+            const res = await INVITE_API.getAllSentInvite(userId);
+            console.log("sent invites", res);
+            set({ sentInvites: res.data });
+        } catch (error) {
+            toast.error(error?.response?.data?.message);
+        } finally {
+            set({ isInviteLoading: false });
+        }
+    },
+
     sendInvite: (invite) => {
         set({isInviteLoading: true})
         try {

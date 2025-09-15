@@ -31,6 +31,7 @@ const InviteSearchPanel = () => {
     getUsers();
     getAllPendingInvites(authUser?.id);
   }, [])
+  console.log(pendingInvites)
 
   return (
     <aside className="h-full w-full lg:w-max-[300px] bg-bamboo flex flex-col rounded-[10px] transition-all duration-200">
@@ -66,16 +67,17 @@ const InviteSearchPanel = () => {
       {activeTab === "INVITE" &&
       <div className="overflow-y-auto w-full h-full py-3">
         {users.map((user) => {
+          console.log("user", user)
           const isSender = pendingInvites.some((i) => 
-            i.senderId === user.id
+            i.sender.id === user.id
           )
 
           const invite = pendingInvites.find((i) => 
-            i.senderId === user.id
+            i.sender.id === user.id
           )
-
+          
           const isRecipient = pendingInvites.some((i) => 
-            i.recipientId === user.id
+            i.recipient.id === user.id
           )
 
           const alreadyAddFriend = rooms.some((r) => 
@@ -86,7 +88,7 @@ const InviteSearchPanel = () => {
           ) 
 
           console.log("s", isSender, "r", isRecipient, "a", alreadyAddFriend)
-
+        
           return (
             <div
               key={user?.id}

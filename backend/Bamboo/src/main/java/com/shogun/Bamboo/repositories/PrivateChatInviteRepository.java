@@ -32,7 +32,17 @@ public interface PrivateChatInviteRepository extends JpaRepository<PrivateChatIn
             """)
     List<PrivateChatInvite> findAllPendingInvitesByRecipient(@Param("recipientId") UUID recipientId);
 
-
+    @Query("""
+        SELECT i FROM PrivateChatInvite i
+        JOIN FETCH i.recipient
+        JOIN FETCH i.sender
+        WHERE i.id IN (
+            SELECT ii.id FROM PrivateChatInvite ii
+            WHERE ii.status = 'PENDING'
+              AND (ii.recipient.id = :userId OR ii.sender.id = :userId)
+        )
+        """)
+    List<PrivateChatInvite> findAllPendingInvitesByUser(@Param("userId") UUID userId);
     @Query("""
             SELECT i FROM PrivateChatInvite i
             WHERE (i.sender.id = :userA AND i.recipient.id = :userB)

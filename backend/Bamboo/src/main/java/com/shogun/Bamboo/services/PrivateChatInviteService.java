@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -98,7 +99,14 @@ public class PrivateChatInviteService {
     }
 
     public List<PrivateChatInviteDto> getAllPendingInvite(UUID userId) {
-        List<PrivateChatInvite> privateChatInviteList = privateChatInviteRepository.findAllPendingInvitesByRecipient(userId);
+        List<PrivateChatInvite> privateChatInviteList = privateChatInviteRepository.findAllPendingInvitesByUser(userId);
         return privateChatInviteMapper.toDtoList(privateChatInviteList);
     }
+
+    public List<PrivateChatInviteDto> getAllPendingSentInvites(UUID senderId) {
+        List<PrivateChatInvite> privateChatInviteList = Collections.emptyList();
+                //privateChatInviteRepository.findAllPendingInvitesBySender(senderId);
+        return privateChatInviteMapper.toDtoList(privateChatInviteList);
+    }
+
 }

@@ -27,5 +27,4 @@ public interface UserDetailsRepository extends JpaRepository<User, UUID> {
     @EntityGraph(attributePaths = "authorities")
     @Query("SELECT u FROM User u WHERE u.id = :id")
     Optional<User> findByIdWithAuthorities(@Param("id") UUID id);
-
 }

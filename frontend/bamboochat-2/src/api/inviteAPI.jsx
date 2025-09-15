@@ -12,5 +12,8 @@ export const INVITE_API = {
     },
     getAllPendingInvite: (userId) => {
         return axiosInstance.get(`/api/rooms/private/invite/${userId}`);
+    },
+    getAllSentInvite: (userId) => {
+        return axiosInstance.get(`/api/rooms/private/invite/sent/${userId}`)
     }
 }

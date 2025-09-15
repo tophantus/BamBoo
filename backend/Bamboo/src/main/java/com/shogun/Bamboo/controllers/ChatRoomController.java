@@ -115,6 +115,14 @@ public class ChatRoomController {
     @GetMapping("/private/invite/{userId}")
     public ResponseEntity<?> getAllPendingInvite(@PathVariable(name = "userId") UUID userId) {
         List<PrivateChatInviteDto> privateChatInviteDto = privateChatInviteService.getAllPendingInvite(userId);
+        System.out.println("privateChatInvite" + privateChatInviteDto);
+        return new ResponseEntity<>(privateChatInviteDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/private/invite/sent/{senderId}")
+    public ResponseEntity<?> getAllPendingSentInvites(@PathVariable(name = "senderId") UUID senderId) {
+        List<PrivateChatInviteDto> privateChatInviteDto =
+                privateChatInviteService.getAllPendingSentInvites(senderId);
         return new ResponseEntity<>(privateChatInviteDto, HttpStatus.OK);
     }
 
